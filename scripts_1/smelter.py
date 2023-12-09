@@ -2,10 +2,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.stats import kruskal
-import numpy as np
 
 # DATAFILE
-file_path = 'data/study3/data_2023_12_8.csv'
+file_path = '../data/study3/data_2023_12_8.csv'
 
 # Read the CSV file
 df = pd.read_csv(file_path)

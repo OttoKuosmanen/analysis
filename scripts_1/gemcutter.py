@@ -4,7 +4,7 @@ import numpy as np
 import seaborn as sns
 
 # DATAFILE
-file_path = 'data/study3/data_2023_12_8.csv'
+file_path = '../data/study3/data_2023_12_8.csv'
 
 # Read the CSV file
 df = pd.read_csv(file_path)
@@ -186,7 +186,7 @@ bar_width = 0.20
 # Create positions for the bars
 x = np.arange(len(scale_points))
 x_labels = groups
-
+ 
 # Create subplots
 fig, ax = plt.subplots(figsize=(12, 8))
 

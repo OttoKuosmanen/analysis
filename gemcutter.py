@@ -193,7 +193,7 @@ fig, ax = plt.subplots(figsize=(12, 8))
 # Create bars for each scale point
 for i, scale_point in enumerate(scale_points):
     ax.bar(x + i * bar_width, [group_means[i] for group_means in means], bar_width, label=scale_point,color=color_palette[chosen_colors[i]])
-legend_handles = [plt.Line2D([0], [0], color='black', linestyle='--', lw=2, label=f'{scale_point} --') for scale_point in scale_points]
+
 # Add a horizontal line for the total mean for each group
 ax.axhline(mean_h, color='black', linestyle='--', xmin=0.048, xmax = 0.048 * 5 - 0.005)
 ax.axhline(mean_3, color='black', linestyle='--', xmin=0.048 * 6 - 0.002, xmax = 0.048 * 10 - 0.005)
@@ -201,10 +201,11 @@ ax.axhline(mean_chat, color='black', linestyle='--', xmin=0.048 * 11 - 0.005, xm
 ax.axhline(mean_4, color='black', linestyle='--', xmin=0.048 * 16 - 0.005, xmax = 0.048 * 20 - 0.005)
 
 # Add numbers to the lines
-ax.text(0.30, mean_h, f'Model Mean: {mean_h:.2f}', color='black', fontsize=15, ha='center', va='bottom', fontweight='bold')
-ax.text(1.30, mean_3, f'Model Mean: {mean_3:.2f}', color='black', fontsize=15, ha='center', va='bottom',fontweight='bold')
-ax.text(2.30, mean_chat, f'Model Mean: {mean_chat:.2f}', color='black', fontsize=15, ha='center', va='bottom',fontweight='bold')
-ax.text(3.30, mean_4, f'Model Mean: {mean_4:.2f}', color='black', fontsize=15, va='bottom',fontweight='bold', ha='center')
+ax.text(0.30, mean_h, f'{mean_h:.2f}', color='black', fontsize=15, ha='center', va='bottom', fontweight='bold')
+ax.text(1.30, mean_3, f'{mean_3:.2f}', color='black', fontsize=15, ha='center', va='bottom',fontweight='bold')
+ax.text(2.30, mean_chat, f'{mean_chat:.2f}', color='black', fontsize=15, ha='center', va='bottom',fontweight='bold')
+ax.text(3.30, mean_4, f'{mean_4:.2f}', color='black', fontsize=15, va='bottom',fontweight='bold', ha='center')
+
 
 
 
@@ -217,6 +218,20 @@ ax.legend(fontsize=15,framealpha=0.8)
 
 ax.tick_params(axis='y', labelsize=16)
 ax.tick_params(axis='x', labelsize=16)
+# Get the handles and labels from the original legend
+handles, labels = ax.get_legend_handles_labels()
+
+# Add your custom legend item to the handles and labels
+custom_legend_item = plt.Line2D([0], [0], color='black', linestyle='--', lw=2, label='Group means')
+handles.append(custom_legend_item)
+labels.append('Group mean')
+
+# Remove the original legend
+ax.get_legend().remove()
+
+# Add the combined legend with both original and custom items
+ax.legend(handles, labels, fontsize=12, title_fontsize=14, framealpha=0.8)
+
 
 
 # Show the plot

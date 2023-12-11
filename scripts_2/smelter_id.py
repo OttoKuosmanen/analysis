@@ -72,3 +72,25 @@ print(f"gpt4 correct :{gpt4_correct}%")
 human_correct =  human_human_count / (human_human_count + human_ai_count)
 print(f"Human correct :{human_correct}%")
 
+
+# Create a bar plot to visualize the rates of correct identification for each model
+models = ['Human', 'GPT3', 'GPT3.5', 'GPT4', 'AI Total']
+correct_rates = [human_correct, gpt3_correct, gptchat_correct, gpt4_correct, ai_correct]
+
+# Create a bar plot
+plt.figure(figsize=(10, 6))
+sns.barplot(x=models, y=correct_rates, palette='viridis')
+plt.title('Correctly identified as AI or Human')
+plt.ylim(0, 1)  # Set y-axis limit from 0 to 1
+plt.ylabel('Correct Identification Rate')
+plt.xlabel('Models')
+plt.xticks(rotation=45)  # Rotate x-axis labels for better readability
+
+# Display the percentages on top of the bars
+for i, rate in enumerate(correct_rates):
+    plt.text(i, rate + 0.02, f'{rate*100:.2f}%', ha='center', fontsize=12)
+
+# Show the plot
+plt.tight_layout()
+plt.show()
+

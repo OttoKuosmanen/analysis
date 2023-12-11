@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from scipy.stats import kruskal
+from scipy.stats import kruskal, f_oneway
 
 # DATAFILE
 file_path = '../data/study3/data_2023_12_8.csv'
@@ -71,6 +71,14 @@ if p_value < alpha:
     print("There are significant differences between the groups.")
 else:
     print("There are no significant differences between the groups.")
+
+f_statistic, p_value_anova = f_oneway(data_Human, data_GPT3, data_GPTchat, data_GPT4)
+
+# Check the p-value to determine significance for ANOVA test
+if p_value_anova < alpha:
+    print("ANOVA test: There are significant differences between the groups.")
+else:
+    print("ANOVA test: There are no significant differences between the groups.")
 
 plt.show()
 

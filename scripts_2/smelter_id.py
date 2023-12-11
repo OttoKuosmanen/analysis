@@ -4,7 +4,7 @@ import seaborn as sns
 from scipy.stats import kruskal
 
 # DATAFILE
-file_path = '../data/study2/data_2023_12_9.csv'
+file_path = '../data/study2/data_2023_12_11.csv'
 
 # Read the CSV file
 df = pd.read_csv(file_path)

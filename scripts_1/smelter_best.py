@@ -2,9 +2,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+from matplotlib.patches import Patch
 
 # DATAFILE
-file_path = '../data/study1/data_2023_12_9.csv'
+file_path = '../data/study1/data_2023_12_11.csv'
 
 # Read the CSV file
 df = pd.read_csv(file_path)
@@ -19,14 +20,15 @@ data_ore = df.drop([0, 1], axis=0)
 # Chop columns to include only ratings
 ratings = data_ore.iloc[:, 22:-2]
 
-
+"""
  #read comments
 for comment in df['Comment']:
     print(comment)
+"""
 
-
-
+"""
 # Problem Human answer ! Human instance 1
+"""
 
 # Group ratings
 
@@ -67,32 +69,58 @@ print(f"AI chosen: {ai_chosen/total}%")
 
 # Define the model names and their respective percentages
 models = ['GPT3', 'GPT3.5', 'GPT4']
-percentages = [g3, gc, g4]  # Replace these with actual values
+percentages = [g3, gc, g4]
+
+# Reminders = human chosen.
+complement_percentages = [100 - p for p in percentages]
 
 # Create an array with the position of each bar along the x-axis
 x_pos = np.arange(len(models))
 
 # Set up the bar chart
-plt.figure(figsize=(10, 6))
+plt.figure(figsize=(10, 6),facecolor="silver")
+
+
 
 # Use Seaborn's colorblind color palette
 colors_blind = sns.color_palette('colorblind')
 
 # Assign colors from the palette to the bars
-bars = plt.bar(x_pos, percentages, capsize=6, color=colors_blind[:3])
+ai_bars = plt.bar(x_pos, percentages, color='steelblue', label='AI Chosen', width=0.66)
 
-# Add the data value on head of each bar
-for bar in bars:
+# Creating the complement bars and adding complement data labels
+for i in range(len(models)):
+    complement_bar = plt.bar(x_pos[i], complement_percentages[i], bottom=percentages[i], 
+                             color='salmon', edgecolor='none', label='Human Chosen' if i == 0 else "", width =0.66)
+    # Calculate the position for the complement label
+    label_position = percentages[i] + complement_percentages[i] / 2
+    plt.text(x_pos[i], label_position, f"{round(complement_percentages[i],1)}%", 
+             ha='center', va='center', color='white', fontweight='bold')
+
+# Adding data labels
+for bar, percentage in zip(ai_bars, percentages):
     yval = bar.get_height()
-    plt.text(bar.get_x() + bar.get_width()/2, yval, round(yval,1), ha='center', va='bottom', color='black')
+    plt.text(bar.get_x() + bar.get_width()/2, yval/2, f"{round(percentage,1)}%", 
+             ha='center', va='center', color='black', fontweight='bold')
+
+# Create custom handles for the legend
+legend_handles = [
+    Patch(facecolor='salmon', label='Human Chosen'),
+    Patch(facecolor='steelblue', label='AI Chosen')
+]
+
+# Add a legend with custom order and move it outside the plot area
+plt.legend(handles=legend_handles, loc='upper left', bbox_to_anchor=(0.8, 1))
+
+# Adjust the subplot margins to provide more space
+plt.subplots_adjust(right=0.75)
 
 # Set the x-axis labels horizontally
-plt.xticks(x_pos, models)
+plt.xticks(x_pos, models, fontweight='bold')
 
-# Set labels and title with bold font
-plt.ylabel('% Frequency that model advice is preferred over best Reddit advice', fontsize=10)
-plt.xlabel('Model', fontsize=12)
-plt.title('Comparison of Model Advice Preference', fontsize=16, fontweight='bold')
+plt.ylabel('% Frequency of Choosing Advice as More Helpful', fontsize=10, fontweight='bold')
+plt.xlabel('Model', fontsize=12, fontweight='bold')
+plt.title('What Advice is More Helpful: Frequency of Choice', fontsize=16, fontweight='bold')
 
 # Set the y-axis range to 0-100%
 plt.ylim(0, 100)
@@ -103,5 +131,6 @@ plt.axhline(y=50, color='black', linestyle='--')
 # Show the figure
 plt.tight_layout()
 plt.show()
+
 
 

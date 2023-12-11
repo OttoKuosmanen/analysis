@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # DATAFILE
-file_path = '../data/study3/data_2023_12_9.csv'
+file_path = '../data/study3/data_2023_12_11.csv'
 
 # Read the CSV file
 df = pd.read_csv(file_path)

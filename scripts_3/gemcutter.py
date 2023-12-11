@@ -4,7 +4,7 @@ import numpy as np
 import seaborn as sns
 
 # DATAFILE
-file_path = '../data/study3/data_2023_12_8.csv'
+file_path = '../data/study3/data_2023_12_11.csv'
 
 # Read the CSV file
 df = pd.read_csv(file_path)

@@ -58,12 +58,6 @@ data_GPT3 = GPT3.values.flatten()[GPT3.values.flatten() != 0]
 data_GPTchat = GPTchat.values.flatten()[GPTchat.values.flatten() != 0]
 data_GPT4 = GPT4.values.flatten()[GPT4.values.flatten() != 0]
 
-#count n
-
-count_h = len(data_Human)
-count_gpt3 = len(data_GPT3)
-count_gptchat = len(data_GPTchat)
-count_gpt4 = len(data_GPT4)
 
 # SCALE POINTS
 
@@ -108,64 +102,6 @@ sd_3 = np.std(data_GPT3)
 sd_chat = np.std(data_GPTchat)
 sd_4 = np.std(data_GPT4)
 
-# Calculate Q1 (25th percentile) and Q3 (75th percentile)
-Q1_human = np.percentile(data_Human, 25)
-Q3_human = np.percentile(data_Human, 75)
-IQR_human = Q3_human - Q1_human
-
-Q1_gpt3 = np.percentile(data_GPT3, 25)
-Q3_gpt3 = np.percentile(data_GPT3, 75)
-IQR_gpt3 = Q3_gpt3 - Q1_gpt3
-
-Q1_gptchat = np.percentile(data_GPTchat, 25)
-Q3_gptchat = np.percentile(data_GPTchat, 75)
-IQR_gptchat = Q3_gptchat - Q1_gptchat
-
-Q1_gpt4 = np.percentile(data_GPT4, 25)
-Q3_gpt4 = np.percentile(data_GPT4, 75)
-IQR_gpt4 = Q3_gpt4 - Q1_gpt4
-
-iqrs = [IQR_human, IQR_gpt3, IQR_gptchat, IQR_gpt4]  # IQR values for each group
-
-# Function to calculate IQR
-def calculate_iqr(data):
-    Q1 = np.percentile(data, 25)
-    Q3 = np.percentile(data, 75)
-    return Q3 - Q1
-
-# Calculate IQR for all scale points for each group
-# Human
-iqr_h_helpfulness = calculate_iqr(data_human_helpfulness)
-iqr_h_effectiveness = calculate_iqr(data_human_effectiveness)
-iqr_h_appropriateness = calculate_iqr(data_human_appropriateness)
-iqr_h_sensitivity = calculate_iqr(data_human_sensitivity)
-
-# GPT3
-iqr_3_helpfulness = calculate_iqr(data_GPT3_helpfulness)
-iqr_3_effectiveness = calculate_iqr(data_GPT3_effectiveness)
-iqr_3_appropriateness = calculate_iqr(data_GPT3_appropriateness)
-iqr_3_sensitivity = calculate_iqr(data_GPT3_sensitivity)
-
-# GPTchat
-iqr_chat_helpfulness = calculate_iqr(data_GPTchat_helpfulness)
-iqr_chat_effectiveness = calculate_iqr(data_GPTchat_effectiveness)
-iqr_chat_appropriateness = calculate_iqr(data_GPTchat_appropriateness)
-iqr_chat_sensitivity = calculate_iqr(data_GPTchat_sensitivity)
-
-# GPT4
-iqr_4_helpfulness = calculate_iqr(data_GPT4_helpfulness)
-iqr_4_effectiveness = calculate_iqr(data_GPT4_effectiveness)
-iqr_4_appropriateness = calculate_iqr(data_GPT4_appropriateness)
-iqr_4_sensitivity = calculate_iqr(data_GPT4_sensitivity)
-
-# Combine IQRs into a list similar to how stds are structured
-iqrs = [
-    [iqr_h_helpfulness, iqr_h_effectiveness, iqr_h_appropriateness, iqr_h_sensitivity],
-    [iqr_3_helpfulness, iqr_3_effectiveness, iqr_3_appropriateness, iqr_3_sensitivity],
-    [iqr_chat_helpfulness, iqr_chat_effectiveness, iqr_chat_appropriateness, iqr_chat_sensitivity],
-    [iqr_4_helpfulness, iqr_4_effectiveness, iqr_4_appropriateness, iqr_4_sensitivity]
-]
-
 
 #statistics for all scale points for the Human group
 mean_h_helpfulness = np.mean(data_human_helpfulness)
@@ -177,12 +113,6 @@ median_h_helpfulness = np.median(data_human_helpfulness)
 median_h_effectiveness = np.median(data_human_effectiveness)
 median_h_appropriateness = np.median(data_human_appropriateness)
 median_h_sensitivity = np.median(data_human_sensitivity)
-
-# Standard deviations for the Human group
-std_h_helpfulness = np.std(data_human_helpfulness, ddof=1)
-std_h_effectiveness = np.std(data_human_effectiveness, ddof=1)
-std_h_appropriateness = np.std(data_human_appropriateness, ddof=1)
-std_h_sensitivity = np.std(data_human_sensitivity, ddof=1)
 
 
 
@@ -197,11 +127,6 @@ median_3_effectiveness = np.median(data_GPT3_effectiveness)
 median_3_appropriateness = np.median(data_GPT3_appropriateness)
 median_3_sensitivity = np.median(data_GPT3_sensitivity)
 
-# Standard deviations for the GPT3 group
-std_3_helpfulness = np.std(data_GPT3_helpfulness, ddof=1)
-std_3_effectiveness = np.std(data_GPT3_effectiveness, ddof=1)
-std_3_appropriateness = np.std(data_GPT3_appropriateness, ddof=1)
-std_3_sensitivity = np.std(data_GPT3_sensitivity, ddof=1)
 
 
 #statistics for all scale points for the GPTchat group
@@ -215,12 +140,6 @@ median_chat_effectiveness = np.median(data_GPTchat_effectiveness)
 median_chat_appropriateness = np.median(data_GPTchat_appropriateness)
 median_chat_sensitivity = np.median(data_GPTchat_sensitivity)
 
-# Standard deviations for the GPTchat group
-std_chat_helpfulness = np.std(data_GPTchat_helpfulness, ddof=1)
-std_chat_effectiveness = np.std(data_GPTchat_effectiveness, ddof=1)
-std_chat_appropriateness = np.std(data_GPTchat_appropriateness, ddof=1)
-std_chat_sensitivity = np.std(data_GPTchat_sensitivity, ddof=1)
-
 
 
 #statistics for all scale points for the GPT4 group
@@ -233,22 +152,6 @@ median_4_helpfulness = np.median(data_GPT4_helpfulness)
 median_4_effectiveness = np.median(data_GPT4_effectiveness)
 median_4_appropriateness = np.median(data_GPT4_appropriateness)
 median_4_sensitivity = np.median(data_GPT4_sensitivity)
-
-
-# Standard deviations for the GPT4 group
-std_4_helpfulness = np.std(data_GPT4_helpfulness, ddof=1)
-std_4_effectiveness = np.std(data_GPT4_effectiveness, ddof=1)
-std_4_appropriateness = np.std(data_GPT4_appropriateness, ddof=1)
-std_4_sensitivity = np.std(data_GPT4_sensitivity, ddof=1)
-
-
-# List std
-stds = [
-    [std_h_helpfulness, std_h_effectiveness, std_h_appropriateness, std_h_sensitivity],
-    [std_3_helpfulness, std_3_effectiveness, std_3_appropriateness, std_3_sensitivity],
-    [std_chat_helpfulness, std_chat_effectiveness, std_chat_appropriateness, std_chat_sensitivity],
-    [std_4_helpfulness, std_4_effectiveness, std_4_appropriateness, std_4_sensitivity]
-]
 
 ## PLOTTING
  
@@ -287,19 +190,23 @@ x_labels = groups
 # Create subplots
 fig, ax = plt.subplots(figsize=(12, 8))
 
-
-# Create bars for each scale point with IQR as error bars
+# Create bars for each scale point
 for i, scale_point in enumerate(scale_points):
-    ax.bar(x + i * bar_width, [group_means[i] for group_means in means], bar_width, 
-           label=scale_point, color=color_palette[chosen_colors[i]], 
-           yerr=[group_iqrs[i] for group_iqrs in iqrs], capsize=5)
+    ax.bar(x + i * bar_width, [group_means[i] for group_means in means], bar_width, label=scale_point,color=color_palette[chosen_colors[i]])
 
-    
+# Add a horizontal line for the total mean for each group
+ax.axhline(mean_h, color='black', linestyle='--', xmin=0.048, xmax = 0.048 * 5 - 0.005)
+ax.axhline(mean_3, color='black', linestyle='--', xmin=0.048 * 6 - 0.002, xmax = 0.048 * 10 - 0.005)
+ax.axhline(mean_chat, color='black', linestyle='--', xmin=0.048 * 11 - 0.005, xmax = 0.048 * 15 - 0.005)
+ax.axhline(mean_4, color='black', linestyle='--', xmin=0.048 * 16 - 0.005, xmax = 0.048 * 20 - 0.005)
 
+# Add numbers to the lines
 ax.text(0.30, mean_h, f'{mean_h:.2f}', color='black', fontsize=15, ha='center', va='bottom', fontweight='bold')
 ax.text(1.30, mean_3, f'{mean_3:.2f}', color='black', fontsize=15, ha='center', va='bottom',fontweight='bold')
 ax.text(2.30, mean_chat, f'{mean_chat:.2f}', color='black', fontsize=15, ha='center', va='bottom',fontweight='bold')
 ax.text(3.30, mean_4, f'{mean_4:.2f}', color='black', fontsize=15, va='bottom',fontweight='bold', ha='center')
+
+
 
 
 # Set labels, title, and ticks

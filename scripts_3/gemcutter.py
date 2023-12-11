@@ -211,7 +211,7 @@ ax.text(3.30, mean_4, f'{mean_4:.2f}', color='black', fontsize=15, va='bottom',f
 
 # Set labels, title, and ticks
 ax.set_ylabel('Means', fontdict=title_font)
-ax.set_title('Advice Quality Ratings by Group', fontdict=title_font)
+ax.set_title('Advice Quality Ratings by Source', fontdict=title_font)
 ax.set_xticks(x + (bar_width * (len(groups) - 1)) / 2)
 ax.set_xticklabels(x_labels, fontdict=title_font)
 ax.legend(fontsize=15,framealpha=0.8)

@@ -201,10 +201,10 @@ ax.axhline(mean_chat, color='black', linestyle='--', xmin=0.048 * 11 - 0.005, xm
 ax.axhline(mean_4, color='black', linestyle='--', xmin=0.048 * 16 - 0.005, xmax = 0.048 * 20 - 0.005)
 
 # Add numbers to the lines
-ax.text(0.30, mean_h, f'{mean_h:.2f}', color='black', fontsize=15, ha='center', va='bottom', fontweight='bold')
-ax.text(1.30, mean_3, f'{mean_3:.2f}', color='black', fontsize=15, ha='center', va='bottom',fontweight='bold')
-ax.text(2.30, mean_chat, f'{mean_chat:.2f}', color='black', fontsize=15, ha='center', va='bottom',fontweight='bold')
-ax.text(3.30, mean_4, f'{mean_4:.2f}', color='black', fontsize=15, va='bottom',fontweight='bold', ha='center')
+ax.text(0.61, mean_h, f'{mean_h:.2f}', color='black', fontsize=15, ha='center', va='bottom', fontweight='bold')
+ax.text(1.61, mean_3, f'{mean_3:.2f}', color='black', fontsize=15, ha='center', va='bottom',fontweight='bold')
+ax.text(2.61, mean_chat, f'{mean_chat:.2f}', color='black', fontsize=15, ha='center', va='bottom',fontweight='bold')
+ax.text(3.61, mean_4, f'{mean_4:.2f}', color='black', fontsize=15, va='bottom',fontweight='bold', ha='center')
 
 
 

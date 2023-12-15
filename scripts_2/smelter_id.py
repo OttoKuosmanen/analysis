@@ -105,3 +105,25 @@ for i, (rate, total) in enumerate(zip(correct_rates, total_n)):
 plt.tight_layout()
 plt.show()
 
+import pandas as pd
+from scipy.stats import chi2_contingency
+
+# Assuming 'data_ore' is your DataFrame and has columns for each group with identifications as 'Human' or 'AI'
+
+# Create contingency table
+contingency = pd.DataFrame({
+    'GPT3': [(GPT3 == 'Human').sum().sum(), (GPT3 == 'AI').sum().sum()],
+    'GPT3.5': [(GPTchat == 'Human').sum().sum(), (GPTchat == 'AI').sum().sum()],
+    'GPT4': [(GPT4 == 'Human').sum().sum(), (GPT4 == 'AI').sum().sum()]
+}, index=['Correct Identification', 'Incorrect Identification'])
+
+# Perform Chi-Square Test
+chi2, p, dof, expected = chi2_contingency(contingency)
+
+# Print results
+print(f"Chi-Square Statistic: {chi2}")
+print(f"P-value: {p}")
+print(f"Degrees of Freedom: {dof}")
+print(f"Expected Frequencies:\n{pd.DataFrame(expected, columns=contingency.columns, index=contingency.index)}")
+
+

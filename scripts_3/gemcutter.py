@@ -58,6 +58,12 @@ data_GPT3 = GPT3.values.flatten()[GPT3.values.flatten() != 0]
 data_GPTchat = GPTchat.values.flatten()[GPTchat.values.flatten() != 0]
 data_GPT4 = GPT4.values.flatten()[GPT4.values.flatten() != 0]
 
+# Total observations
+total_human = len(data_Human)
+total_gpt3 = len(data_GPT3)
+total_gptchat = len(data_GPTchat)
+total_gpt4 = len(data_GPT4)
+
 
 # SCALE POINTS
 

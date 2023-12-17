@@ -4,9 +4,10 @@ import seaborn as sns
 import numpy as np
 from matplotlib.patches import Patch
 import matplotlib.ticker as mtick
+from scipy.stats import chi2_contingency
 
 # DATAFILE
-file_path = '../data/study1/data_2023_12_11.csv'
+file_path = '../data/study1/data_2023_12_16.csv'
 
 # Read the CSV file
 df = pd.read_csv(file_path)
@@ -37,23 +38,28 @@ GPT3 = ratings[[col for col in ratings.columns if col.lower().startswith('gpt3_'
 GPTchat = ratings[[col for col in ratings.columns if col.lower().startswith('gpt3.5')]]
 GPT4 = ratings[[col for col in ratings.columns if col.lower().startswith('gpt4')]]
 
+###
 
-# Count "Human" and "AI" for each group
+# Count "Human" and "Human Answer" for each group
 
-gpt3_human_count = (GPT3 == 'Human').sum().sum()
+gpt3_human_count = GPT3.isin(['Human', 'Human Answer']).sum().sum()
 gpt3_ai_count = (GPT3 == 'AI').sum().sum()
 g3 = int(gpt3_ai_count)
+
 gpt3_total_count = gpt3_human_count + gpt3_ai_count
 
-gptchat_human_count = (GPTchat == 'Human').sum().sum()
+gptchat_human_count = GPTchat.isin(['Human', 'Human Answer']).sum().sum()
 gptchat_ai_count = (GPTchat == 'AI').sum().sum()
 gc = int(gptchat_ai_count)
+
 gptchat_total_count = gptchat_human_count + gptchat_ai_count
 
-gpt4_human_count = (GPT4 == 'Human').sum().sum()
+gpt4_human_count = GPT4.isin(['Human', 'Human Answer']).sum().sum()
 gpt4_ai_count = (GPT4 == 'AI').sum().sum()
 g4 = int(gpt4_ai_count)
+
 gpt4_total_count = gpt4_human_count + gpt4_ai_count
+
 
 n = [gpt3_total_count, gptchat_total_count, gpt4_total_count]
 # comparison
@@ -70,7 +76,7 @@ print(f"AI chosen: {ai_chosen} times")
 print(f"Human chosen: {human_chosen/total}%")
 print(f"AI chosen: {ai_chosen/total}%")
 
-
+#PLOTTING#
 
 # Define the model names and their respective percentages
 models = ['GPT3', 'GPT3.5', 'GPT4']
@@ -85,6 +91,8 @@ x_pos = np.arange(len(models))
 # Set up the bar chart
 plt.figure(figsize=(10, 6),facecolor="silver")
 
+# Significance symbols
+significance_markers = ['**', '*', '']
 
 
 # Use Seaborn's colorblind color palette
@@ -111,6 +119,15 @@ for bar, percentage, number in zip(ai_bars, percentages, n):
     # Label for the number at the bottom of the bar
     plt.text(bar.get_x() + bar.get_width()/2, 25, f"N={str(number)}", 
              ha='center', va='bottom', color='black', fontweight='bold')
+    # Your existing code for setting up the plot...
+
+# Add the significance marker
+for i, bar in enumerate(ai_bars):
+    # Position of the marker: slightly above the 50% mark
+    x = bar.get_x() + bar.get_width() / 2
+    y = 53
+    plt.text(x, y, significance_markers[i], ha='center', va='bottom', fontsize=16)
+
 
 # Create custom handles for the legend
 legend_handles = [
@@ -142,5 +159,8 @@ plt.axhline(y=50, color='black', linestyle='--')
 # Show the figure
 plt.tight_layout()
 plt.show()
+
+
+
 
 

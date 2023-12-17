@@ -54,60 +54,37 @@ pooled_expected_counts = np.array([total_ai + total_human] * 2) / 2
 chi2_statistic, p_value = chi2_contingency([pooled_observed_counts, pooled_expected_counts], correction=False)[:2]
 print("Pooled Test:", chi2_statistic, p_value)
 
-
-# PLOTTING #
-
+# PLOTTING
 plt.figure(figsize=(6, 6), facecolor="silver")
 labels = ['AI Chosen', 'Human Chosen']
 total_percentages = [total_ai / (total_ai + total_human) * 100, total_human / (total_ai + total_human) * 100]
-total_counts = [total_ai, total_human]  # Total counts for AI and Human
 bars = plt.bar(labels, total_percentages, color=['steelblue', 'salmon'], width=0.66)
 
-# Add data labels with percentages and total counts on top of the bars
+# Add data labels on top of the bars
 for bar in bars:
     height = bar.get_height()
-    # Display percentage and count
-    label = f'{height:.1f}%'
-    plt.text(bar.get_x() + bar.get_width() / 2.0, height , label, ha='center', va='bottom')
+    plt.text(bar.get_x() + bar.get_width() / 2.0, height, f'{height:.1f}%', ha='center', va='bottom')
 
-for bar, count in zip(bars, total_counts):
-    height = bar.get_height()
-    # Display percentage and count
-    label = f'{count}'
-    plt.text(bar.get_x() + bar.get_width() / 2.0, height / 2, label, ha='center', va='bottom')
 
-# Calculate the x_position as the midpoint between the bars
-x_positions = [bar.get_x() + bar.get_width()/2 for bar in bars]
-x_position = np.mean(x_positions)  # Midpoint between the bars
+# Add a horizontal line at 50%
+plt.axhline(y=50, color='black', linestyle='--')
 
 # Add a label with the total count in between the bars
 total_count_label = f'N: {total_ai + total_human}'
-plt.text(x_position, 5, total_count_label, ha='center', va='bottom', fontsize=10, color='black')
-
-# Determine the level of significance based on p-value
-if p_value < 0.001:
-    significance_level = '***'  # Highly significant
-elif p_value < 0.01:
-    significance_level = '**'   # Very significant
-elif p_value < 0.05:
-    significance_level = '*'    # Significant
-else:
-    significance_level = 'ns'   # Not significant
-
-
-# Calculate the x_position as the midpoint between the bars
 x_positions = [bar.get_x() + bar.get_width()/2 for bar in bars]
 x_position = np.mean(x_positions)  # Midpoint between the bars
+plt.text(x_position, 5, total_count_label, ha='center', va='bottom', fontsize=10, color='black')
 
-# If significant, draw the significance marker
+# Determine the level of significance based on p-value and add the significance marker
 if p_value < 0.05:
+    significance_level = '***' if p_value < 0.001 else '**' if p_value < 0.01 else '*'
     y_position = max(total_percentages) + 2  # Adjust as necessary
     plt.text(x_position, y_position, significance_level, ha='center', va='bottom', fontsize=16)
 
 # Other plot settings
 plt.ylabel('Percentage')
 plt.title('Preference for AI vs. Human Advice')
-plt.ylim(0, max(total_percentages) + 10)  # Adjust the y-axis limit to accommodate the significance marker
+plt.ylim(0, 100)  # Set the y-axis limit to 100%
 
 plt.show()
 

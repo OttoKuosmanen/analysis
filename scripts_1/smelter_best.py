@@ -4,10 +4,32 @@ import seaborn as sns
 import numpy as np
 from matplotlib.patches import Patch
 import matplotlib.ticker as mtick
-from scipy.stats import chi2_contingency
+
+import chi_square
+
+
+# Significance symbols function
+def get_significance_markers(results):
+    significance_markers = []
+    for model, (chi_squared_stat, p_value) in results.items():
+        if p_value < 0.001:
+            marker = '***'
+        elif p_value < 0.01:
+            marker = '**'
+        elif p_value < 0.05:
+            marker = "*"
+        else:
+            marker = ''
+        significance_markers.append(marker)
+    return significance_markers
 
 # DATAFILE
 file_path = '../data/study1/data_2023_12_16.csv'
+
+# Run the analysis script and get results
+results, pooled_result = chi_square.run_analysis(file_path)
+
+
 
 # Read the CSV file
 df = pd.read_csv(file_path)
@@ -22,15 +44,7 @@ data_ore = df.drop([0, 1], axis=0)
 # Chop columns to include only ratings
 ratings = data_ore.iloc[:, 22:-2]
 
-"""
- #read comments
-for comment in df['Comment']:
-    print(comment)
-"""
 
-"""
-# Problem Human answer ! Human instance 1
-"""
 
 # Group ratings
 
@@ -38,7 +52,7 @@ GPT3 = ratings[[col for col in ratings.columns if col.lower().startswith('gpt3_'
 GPTchat = ratings[[col for col in ratings.columns if col.lower().startswith('gpt3.5')]]
 GPT4 = ratings[[col for col in ratings.columns if col.lower().startswith('gpt4')]]
 
-###
+
 
 # Count "Human" and "Human Answer" for each group
 
@@ -62,6 +76,7 @@ gpt4_total_count = gpt4_human_count + gpt4_ai_count
 
 
 n = [gpt3_total_count, gptchat_total_count, gpt4_total_count]
+
 # comparison
 human_chosen = gpt3_human_count + gpt4_human_count + gptchat_human_count
 ai_chosen = gpt3_ai_count + gpt4_ai_count + gptchat_ai_count
@@ -76,14 +91,30 @@ print(f"AI chosen: {ai_chosen} times")
 print(f"Human chosen: {human_chosen/total}%")
 print(f"AI chosen: {ai_chosen/total}%")
 
+# Table
+
+data_t = {
+    'Models': ['GPT3', 'GPT3.5', 'GPT4'],
+    'Total': [gpt3_total_count, gptchat_total_count, gpt4_total_count],
+    'AI_count': [g3, gc, g4],
+    'Human_count': [gpt3_human_count,gptchat_human_count,gpt4_human_count],
+    'AI_preferance': [g3/gpt3_total_count*100,gc/gptchat_total_count*100,g4/gpt4_total_count*100],
+    'Human_preferance': [gpt3_human_count/gpt3_total_count*100,gptchat_human_count/gptchat_total_count*100,gpt4_human_count/gpt4_total_count*100]
+}
+
+table = pd.DataFrame(data_t)
+
+
 #PLOTTING#
 
 # Define the model names and their respective percentages
-models = ['GPT3', 'GPT3.5', 'GPT4']
-percentages = [g3, gc, g4]
+models = table['Models']
 
-# Reminders = human chosen.
-complement_percentages = [100 - p for p in percentages]
+# Access the "AI_preferance" and "Human_preferance" columns
+percentages = table['AI_preferance']
+complement_percentages = table['Human_preferance']
+
+
 
 # Create an array with the position of each bar along the x-axis
 x_pos = np.arange(len(models))
@@ -91,8 +122,10 @@ x_pos = np.arange(len(models))
 # Set up the bar chart
 plt.figure(figsize=(10, 6),facecolor="silver")
 
-# Significance symbols
-significance_markers = ['**', '*', '']
+
+# Get significance symbols based on results from chi_square.py
+significance_markers = get_significance_markers(results)
+
 
 
 # Use Seaborn's colorblind color palette
@@ -119,13 +152,13 @@ for bar, percentage, number in zip(ai_bars, percentages, n):
     # Label for the number at the bottom of the bar
     plt.text(bar.get_x() + bar.get_width()/2, 25, f"N={str(number)}", 
              ha='center', va='bottom', color='black', fontweight='bold')
-    # Your existing code for setting up the plot...
+
 
 # Add the significance marker
 for i, bar in enumerate(ai_bars):
     # Position of the marker: slightly above the 50% mark
     x = bar.get_x() + bar.get_width() / 2
-    y = 53
+    y = 50
     plt.text(x, y, significance_markers[i], ha='center', va='bottom', fontsize=16)
 
 

@@ -1,10 +1,14 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.stats import chi2_contingency
+import chi_square
 
 # DATAFILE
 file_path = '../data/study1/data_2023_12_16.csv'
+
+results, pooled_result = chi_square.run_analysis(file_path)
+
+
 
 # Read and preprocess the CSV file
 df = pd.read_csv(file_path)
@@ -36,23 +40,9 @@ print(f"Human chosen: {total_human / (total_human + total_ai):.2%}")
 print(f"AI chosen: {total_ai / (total_human + total_ai):.2%}")
 
 
-# Signifiance tests
-# Chi-square tests
-def perform_chi_square_test(observed_counts, total_count):
-    expected_counts = [total_count / 2, total_count / 2]
-    chi2, p = chi2_contingency([observed_counts, expected_counts], correction=False)[:2]
-    return chi2, p
+# Pooled results p value taken from chi_square.py
+p_value = pooled_result[1]
 
-# Test for each model
-chi_square_results = {model: perform_chi_square_test(counts[model], total_counts[model]) 
-                      for model in counts}
-print(chi_square_results)
-
-# Pooled test
-pooled_observed_counts = np.array([total_ai, total_human])
-pooled_expected_counts = np.array([total_ai + total_human] * 2) / 2
-chi2_statistic, p_value = chi2_contingency([pooled_observed_counts, pooled_expected_counts], correction=False)[:2]
-print("Pooled Test:", chi2_statistic, p_value)
 
 # PLOTTING
 plt.figure(figsize=(6, 6), facecolor="silver")

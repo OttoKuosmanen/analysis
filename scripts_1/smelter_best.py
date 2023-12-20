@@ -27,7 +27,7 @@ def get_significance_markers(results):
 file_path = '../data/study1/data_2023_12_16.csv'
 
 # Run the analysis script and get results
-results, pooled_result = chi_square.run_analysis(file_path)
+results, pooled_result, comparison = chi_square.run_analysis(file_path)
 
 
 

@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from scipy.stats import chi2
+from scipy.stats import chi2, chi2_contingency
 
 # Function to calculate the Chi-Squared statistic and p-value
 def calculate_chi_squared(observed_counts):
@@ -34,17 +34,24 @@ def run_analysis(file_path):
         counts = count_responses(data)
         chi_squared_results[model] = calculate_chi_squared(np.array(counts))
 
+    # Create a contingency table for the Chi-Square test of independence
+    contingency_table = np.array([count_responses(data) for _, data in model_data.items()])
+
+    # Perform the Chi-Square test of independence
+    chi2_stat, p, dof, expected = chi2_contingency(contingency_table)
+
     # Calculate pooled Chi-Squared statistics and p-values
     pooled_counts = count_responses(data_ore)
     pooled_chi_squared_result = calculate_chi_squared(np.array(pooled_counts))
 
-    return chi_squared_results, pooled_chi_squared_result
+    # Return results
+    return chi_squared_results, pooled_chi_squared_result, (chi2_stat, p, dof, expected, contingency_table)
 
 # This if statement ensures that the following code will run only if the script is executed directly,
 # and not when it is imported as a module.
 if __name__ == "__main__":
     file_path = '../data/study1/data_2023_12_16.csv'
-    results, pooled_result = run_analysis(file_path)
+    results, pooled_result, (chi2_stat, p, dof, expected, contingency_table) = run_analysis(file_path)
 
     # Output the results
     print("Chi-Squared Results for Each Model:")
@@ -52,3 +59,13 @@ if __name__ == "__main__":
         print(f"{model}: Chi-Squared Statistic = {result[0]}, p-value = {result[1]}")
 
     print(f"\nPooled Chi-Squared Result: Chi-Squared Statistic = {pooled_result[0]}, p-value = {pooled_result[1]}")
+
+    # Output the model comparison results
+    print("\nChi-Square Test of Independence:")
+    print(f"Chi-Squared Statistic = {chi2_stat}")
+    print(f"p-value = {p}")
+    print(f"Degrees of Freedom = {dof}")
+    print("Expected Frequencies:")
+    print(expected)
+    print("Contingency Table:")
+    print(contingency_table)

@@ -1,5 +1,6 @@
 import pandas as pd
 from scipy.stats import kruskal
+from scipy.stats import mannwhitneyu
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -65,8 +66,7 @@ ratings = [data_Human, data_AI]
 
 # SIGNIFICANCE TESTING #
 
-# Perform Kruskal-Wallis test on total helpfulness
-h_statistic, p_value = kruskal(*ratings)
+u_statistic, p_value = mannwhitneyu(data_Human, data_AI)
 
 # Check the p-value to determine significance
 alpha = 0.0000000001   # Set your significance level
@@ -75,3 +75,11 @@ if p_value < alpha:
 else:
     print("There are no significant differences between the groups.")
 
+print(p_value)
+print(len(data_Human))
+print(len(data_AI))
+
+# Convert to int
+int_list = [int(item) for item in data_Human]
+
+int_list1 = [int(item) for item in data_AI]

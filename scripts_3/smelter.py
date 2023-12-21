@@ -43,19 +43,19 @@ plt.figure(figsize=(12, 8))
 
 plt.subplot(221)
 sns.histplot(data_Human, kde=True)
-plt.title("Histogram for Human")
+plt.title("Human Advice Quality Ratings", fontweight='bold')
 
 plt.subplot(222)
 sns.histplot(data_GPT3, kde=True)
-plt.title("Histogram for GPT3")
+plt.title("GPT3 Advice Quality Ratings", fontweight='bold')
 
 plt.subplot(223)
 sns.histplot(data_GPTchat, kde=True)
-plt.title("Histogram for GPTchat")
+plt.title("GPT3.5 Advice Quality Ratings", fontweight='bold')
 
 plt.subplot(224)
 sns.histplot(data_GPT4, kde=True)
-plt.title("Histogram for GPT4")
+plt.title("GPT4 Advice Quality Ratings", fontweight='bold')
 
 plt.tight_layout()
 

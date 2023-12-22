@@ -128,7 +128,6 @@ data_AI_sensitivity = np.concatenate([data_GPT3_sensitivity, data_GPTchat_sensit
 
 # ADVICE QUALITY
 perform_stat_test([data_Human, data_AI], "Advice quality difference human and AI")
-#perform_stat_test([data_Human, data_GPT3, data_GPTchat, data_GPT4], "Advice quality difference all models", test_type='kruskal')
 perform_stat_test([data_GPT3, data_GPTchat, data_GPT4], "Advice quality difference all AI models", test_type='kruskal')
 
 perform_stat_test([data_Human, data_GPT3], "Advice quality single comparison GPT3/Human")
@@ -137,25 +136,21 @@ perform_stat_test([data_Human, data_GPT4], "Advice quality single comparison GPT
 
 # HELPFULNESS
 perform_stat_test([data_human_helpfulness, data_AI_helpfulness], "Helpfulness difference between human and AI")
-#perform_stat_test([data_human_helpfulness, data_GPT3_helpfulness, data_GPTchat_helpfulness, data_GPT4_helpfulness], "Helpfulness difference among all models", test_type='kruskal')
 perform_stat_test([data_GPT3_helpfulness, data_GPTchat_helpfulness, data_GPT4_helpfulness], "Helpfulness difference among AI models", test_type='kruskal')
 
 
 # EFFECTIVENESS
 perform_stat_test([data_human_effectiveness, data_AI_effectiveness], "Effectiveness difference between human and AI")
-#perform_stat_test([data_human_effectiveness, data_GPT3_effectiveness, data_GPTchat_effectiveness, data_GPT4_effectiveness], "Effectiveness difference among all models", test_type='kruskal')
 perform_stat_test([data_GPT3_effectiveness, data_GPTchat_effectiveness, data_GPT4_effectiveness], "Effectiveness difference among AI models", test_type='kruskal')
 
 
 # APPROPRIATENESS
 perform_stat_test([data_human_appropriateness, data_AI_appropriateness], "Appropriateness difference between human and AI")
-#perform_stat_test([data_human_appropriateness, data_GPT3_appropriateness, data_GPTchat_appropriateness, data_GPT4_appropriateness], "Appropriateness difference among all models", test_type='kruskal')
 perform_stat_test([data_GPT3_appropriateness, data_GPTchat_appropriateness, data_GPT4_appropriateness], "Appropriateness difference among AI models", test_type='kruskal')
 
 
 # SENSITIVITY
 perform_stat_test([data_human_sensitivity, data_AI_sensitivity], "Sensitivity difference between human and AI")
-#perform_stat_test([data_human_sensitivity, data_GPT3_sensitivity, data_GPTchat_sensitivity, data_GPT4_sensitivity], "Sensitivity difference among all models", test_type='kruskal')
 perform_stat_test([data_GPT3_sensitivity, data_GPTchat_sensitivity, data_GPT4_sensitivity], "Sensitivity difference among AI models", test_type='kruskal')
 
 

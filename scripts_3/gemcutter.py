@@ -180,9 +180,9 @@ means = [
 
 # Define a dictionary for font properties
 title_font = {
-    'fontsize': 22,  # Adjust the font size as needed
-    'fontweight': 'bold',  # Make the title bold
-    'fontfamily': 'serif',  # Change the font family if desired
+    'fontsize': 22, 
+    'fontweight': 'bold',  
+    'fontfamily': 'serif', 
 }
 
 

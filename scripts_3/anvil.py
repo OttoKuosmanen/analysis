@@ -1,5 +1,4 @@
 import pandas as pd
-from scipy.stats import kruskal
 from scipy.stats import mannwhitneyu
 import matplotlib.pyplot as plt
 import numpy as np
@@ -55,27 +54,7 @@ plt.title("Average Scaled Ratings by Model and Rating Scale")
 plt.tight_layout()
 plt.show()
 
-
-
-
-
-
-# Ratings list for Kruskal-Wallis test: Helpfulness
-ratings = [data_Human, data_AI]
-
-
-# SIGNIFICANCE TESTING #
-
-u_statistic, p_value = mannwhitneyu(data_Human, data_AI)
-
-# Check the p-value to determine significance
-alpha = 0.0000000000000000001   # Set your significance level
-if p_value < alpha:
-    print("There are significant differences between the groups.")
-else:
-    print("There are no significant differences between the groups.")
-
-print(p_value)
+# CHECKING
 print(len(data_Human))
 print(len(data_AI))
 

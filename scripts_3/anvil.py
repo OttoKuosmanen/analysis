@@ -69,7 +69,7 @@ ratings = [data_Human, data_AI]
 u_statistic, p_value = mannwhitneyu(data_Human, data_AI)
 
 # Check the p-value to determine significance
-alpha = 0.0000000001   # Set your significance level
+alpha = 0.0000000000000000001   # Set your significance level
 if p_value < alpha:
     print("There are significant differences between the groups.")
 else:

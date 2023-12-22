@@ -59,6 +59,7 @@ plt.title("GPT4 Advice Quality Ratings", fontweight='bold')
 
 plt.tight_layout()
 
+# Significance testing
 # Ratings list for Kruskal-Wallis test
 ratings_list = [data_Human, data_GPT3, data_GPTchat, data_GPT4]
 
@@ -66,6 +67,7 @@ ratings_list = [data_Human, data_GPT3, data_GPTchat, data_GPT4]
 h_statistic, p_value = kruskal(*ratings_list)
 
 # Check the p-value to determine significance
+print(p_value)
 alpha = 0.00000000000001   # Set your significance level
 if p_value < alpha:
     print("There are significant differences between the groups.")

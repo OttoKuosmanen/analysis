@@ -121,7 +121,7 @@ chi2_gpt4, p_gpt4 = perform_chi_square_test(gpt4_observed)
 chi2_human, p_human = perform_chi_square_test(human_observed)
 chi2_ai, p_ai = perform_chi_square_test(AI_observed)
 
-# You can print these values to see the results
+# print values to see the results
 print("GPT-3 Chi-Square:", chi2_gpt3, "P-Value:", p_gpt3)
 print("GPTchat Chi-Square:", chi2_gptchat, "P-Value:", p_gptchat)
 print("GPT-4 Chi-Square:", chi2_gpt4, "P-Value:", p_gpt4)

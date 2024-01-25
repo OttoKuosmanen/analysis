@@ -5,7 +5,6 @@ import chi_square
 
 # DATAFILE
 file_path = '../data/study1/data_2023_12_16.csv'
-
 results, pooled_result, comparison = chi_square.run_analysis(file_path)
 
 
@@ -45,15 +44,15 @@ p_value = pooled_result[1]
 
 
 # PLOTTING
-plt.figure(figsize=(6, 6), facecolor="silver")
-labels = ['AI Chosen', 'Human Chosen']
-total_percentages = [total_ai / (total_ai + total_human) * 100, total_human / (total_ai + total_human) * 100]
-bars = plt.bar(labels, total_percentages, color=['steelblue', 'salmon'], width=0.66)
-
+plt.figure(figsize=(8, 6))
+labels = ['Human', 'AI']
+total_percentages = [total_human / (total_ai + total_human) * 100, total_ai / (total_ai + total_human) * 100]
+[total_human / (total_ai + total_human) * 100, total_ai / (total_ai + total_human) * 100]
+bars = plt.bar(labels, total_percentages, color=['#f7786b','#034f84'], width=0.70)
 # Add data labels on top of the bars
 for bar in bars:
     height = bar.get_height()
-    plt.text(bar.get_x() + bar.get_width() / 2.0, height, f'{height:.1f}%', ha='center', va='bottom')
+    plt.text(bar.get_x() + bar.get_width() / 2.0, height + 1, f'{height:.1f}%', ha='center', va='bottom', fontsize="20")
 
 
 # Add a horizontal line at 50%
@@ -63,19 +62,21 @@ plt.axhline(y=50, color='black', linestyle='--')
 total_count_label = f'N: {total_ai + total_human}'
 x_positions = [bar.get_x() + bar.get_width()/2 for bar in bars]
 x_position = np.mean(x_positions)  # Midpoint between the bars
-plt.text(x_position, 5, total_count_label, ha='center', va='bottom', fontsize=10, color='black')
+plt.text(x_position, 5, total_count_label, ha='center', va='bottom', fontsize=18, color='black')
 
 # Determine the level of significance based on p-value and add the significance marker
 if p_value < 0.05:
     significance_level = '***' if p_value < 0.001 else '**' if p_value < 0.01 else '*'
     y_position = max(total_percentages) + 2  # Adjust as necessary
-    plt.text(x_position, y_position, significance_level, ha='center', va='bottom', fontsize=16)
+    plt.text(x_position, y_position, significance_level, ha='center', va='bottom', fontsize=20)
 
 # Other plot settings
-plt.ylabel('Percentage')
-plt.title('Preference for AI vs. Human Advice')
-plt.ylim(0, 100)  # Set the y-axis limit to 100%
+plt.ylabel('Percentage', fontweight='bold', fontsize="24")
+plt.yticks([0,25,50,75,100],fontsize=18)
+plt.title('Advice chosen as more helpfull', fontweight='bold', fontsize="24", pad=24)
 
+plt.ylim(0, 100)  # Set the y-axis limit to 100%
+plt.xticks(fontsize=18)  # Adjust X-axis tick font size here
 plt.show()
 
 

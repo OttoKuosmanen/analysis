@@ -5,7 +5,7 @@ import chi_square
 
 # DATAFILE
 file_path = '../data/study1/data_2023_12_16.csv'
-results, pooled_result, comparison = chi_square.run_analysis(file_path)
+results, pooled_result = chi_square.run_analysis(file_path)
 
 
 
@@ -73,7 +73,9 @@ if p_value < 0.05:
 # Other plot settings
 plt.ylabel('Percentage', fontweight='bold', fontsize="24")
 plt.yticks([0,25,50,75,100],fontsize=18)
-plt.title('Advice chosen as more helpfull', fontweight='bold', fontsize="24", pad=24)
+plt.title('Advice Chosen As More Helpful', fontdict={'fontname': 'Arial', 'size': 24}, pad=24)
+
+
 
 plt.ylim(0, 100)  # Set the y-axis limit to 100%
 plt.xticks(fontsize=18)  # Adjust X-axis tick font size here

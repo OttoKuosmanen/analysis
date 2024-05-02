@@ -1,10 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from scipy.stats import kruskal
 
 # DATAFILE
-file_path = '../data/study3/data_2023_12_8.csv'
+file_path = '../data/study3/data_2023_12_16.csv'
 
 # Read the CSV file
 df = pd.read_csv(file_path)
@@ -38,7 +37,7 @@ data_GPTchat = GPTchat.values.flatten()[GPTchat.values.flatten() != 0]
 data_GPT4 = GPT4.values.flatten()[GPT4.values.flatten() != 0]
 
 
-# Create histograms
+# Create histograms for rating distributions
 plt.figure(figsize=(12, 8))
 
 plt.subplot(221)
@@ -47,11 +46,11 @@ plt.title("Human Advice Quality Ratings", fontweight='bold')
 
 plt.subplot(222)
 sns.histplot(data_GPT3, kde=True)
-plt.title("GPT3 Advice Quality Ratings", fontweight='bold')
+plt.title("Text_Davinci_3 Advice Quality Ratings", fontweight='bold')
 
 plt.subplot(223)
 sns.histplot(data_GPTchat, kde=True)
-plt.title("GPT3.5 Advice Quality Ratings", fontweight='bold')
+plt.title("GPT3.5_Trubo Advice Quality Ratings", fontweight='bold')
 
 plt.subplot(224)
 sns.histplot(data_GPT4, kde=True)
@@ -59,24 +58,7 @@ plt.title("GPT4 Advice Quality Ratings", fontweight='bold')
 
 plt.tight_layout()
 
-# Significance testing
-# Ratings list for Kruskal-Wallis test
-ratings_list = [data_Human, data_GPT3, data_GPTchat, data_GPT4]
-
-# Perform Kruskal-Wallis test
-h_statistic, p_value = kruskal(*ratings_list)
-
-# Check the p-value to determine significance
-print(p_value)
-alpha = 0.00000000000001   # Set your significance level
-if p_value < alpha:
-    print("There are significant differences between the groups.")
-else:
-    print("There are no significant differences between the groups.")
-
 plt.show()
-
-
 
 
 

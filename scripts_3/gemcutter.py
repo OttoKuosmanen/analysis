@@ -4,7 +4,7 @@ import numpy as np
 import seaborn as sns
 
 # DATAFILE
-file_path = '../data/study3/data_2023_12_11.csv'
+file_path = '../data/study3/data_2023_12_16.csv'
 
 # Read the CSV file
 df = pd.read_csv(file_path)
@@ -162,7 +162,7 @@ median_4_sensitivity = np.median(data_GPT4_sensitivity)
 ## PLOTTING
  
 # Data
-groups = ['Human', 'GPT-3', 'GPT-3.5', 'GPT-4']
+groups = ['Human', 'Davinci-3', 'GPT-3.5-Turbo', 'GPT-4']
 scale_points = ['Helpfulness', 'Effectiveness', 'Appropriateness', 'Sensitivity']
 
 # A color palette with distinguishable and colorblind-friendly colors
@@ -207,23 +207,22 @@ ax.axhline(mean_chat, color='black', linestyle='--', xmin=0.048 * 11 - 0.005, xm
 ax.axhline(mean_4, color='black', linestyle='--', xmin=0.048 * 16 - 0.005, xmax = 0.048 * 20 - 0.005)
 
 # Add numbers to the lines
-ax.text(0.61, mean_h, f'{mean_h:.2f}', color='black', fontsize=15, ha='center', va='bottom', fontweight='bold')
-ax.text(1.61, mean_3, f'{mean_3:.2f}', color='black', fontsize=15, ha='center', va='bottom',fontweight='bold')
-ax.text(2.61, mean_chat, f'{mean_chat:.2f}', color='black', fontsize=15, ha='center', va='bottom',fontweight='bold')
-ax.text(3.61, mean_4, f'{mean_4:.2f}', color='black', fontsize=15, va='bottom',fontweight='bold', ha='center')
+ax.text(0.61, mean_h, f'{mean_h:.2f}', color='black', fontsize=20, ha='center', va='bottom', fontweight='bold')
+ax.text(1.61, mean_3, f'{mean_3:.2f}', color='black', fontsize=20, ha='center', va='bottom',fontweight='bold')
+ax.text(2.61, mean_chat, f'{mean_chat:.2f}', color='black', fontsize=20, ha='center', va='bottom',fontweight='bold')
+ax.text(3.61, mean_4, f'{mean_4:.2f}', color='black', fontsize=20, va='bottom',fontweight='bold', ha='center')
 
 
 
 
 # Set labels, title, and ticks
-ax.set_ylabel('Means', fontdict=title_font)
-ax.set_title('Advice Quality Ratings by Source', fontdict=title_font)
+ax.set_ylabel('Means', fontdict=title_font, fontsize=32)
+ax.set_title('Advice Quality Ratings by Source', fontdict=title_font, fontsize=32)
 ax.set_xticks(x + (bar_width * (len(groups) - 1)) / 2)
 ax.set_xticklabels(x_labels, fontdict=title_font)
-ax.legend(fontsize=15,framealpha=0.8)
 
-ax.tick_params(axis='y', labelsize=16)
-ax.tick_params(axis='x', labelsize=16)
+ax.tick_params(axis='y', labelsize=18)
+ax.tick_params(axis='x', labelsize=24)
 # Get the handles and labels from the original legend
 handles, labels = ax.get_legend_handles_labels()
 
@@ -233,10 +232,11 @@ handles.append(custom_legend_item)
 labels.append('Group mean')
 
 # Remove the original legend
-ax.get_legend().remove()
+# ax.get_legend().remove()
+ax.set_ylim(0,7)
 
 # Add the combined legend with both original and custom items
-ax.legend(handles, labels, fontsize=12, title_fontsize=14, framealpha=0.8)
+ax.legend(handles, labels, fontsize=14, title_fontsize=14, framealpha=0.8)
 
 
 

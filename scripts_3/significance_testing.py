@@ -4,7 +4,7 @@ from scipy.stats import kruskal
 from scipy.stats import mannwhitneyu
 
 # functions
-
+"""
 def perform_stat_test(test_data, test_name, alpha=0.003, test_type='mannwhitneyu'):
     print(f"_____________________{test_name}____________________")
     if test_type == 'mannwhitneyu':
@@ -18,9 +18,35 @@ def perform_stat_test(test_data, test_name, alpha=0.003, test_type='mannwhitneyu
     else:
         print("There are no significant differences between the groups.")
     print("____________________________________________________\n")
+"""    
+
+
+def perform_stat_test(test_data, test_name, alpha=0.003, test_type='mannwhitneyu'):
+    print(f"_____________________{test_name}____________________")
+    if test_type == 'mannwhitneyu':
+        u_statistic, p_value = mannwhitneyu(*test_data)
+        # Calculate z-value for Mann-Whitney U. This is an approximation and assumes large sample sizes.
+        n1, n2 = len(test_data[0]), len(test_data[1])
+        mean_u = n1*n2/2
+        std_u = np.sqrt(n1*n2*(n1+n2+1)/12)
+        z_value = (u_statistic - mean_u) / std_u
+        print(f"U statistic = {u_statistic}, p-value = {p_value}, z-value = {z_value:.2f}")
+    elif test_type == 'kruskal':
+        h_statistic, p_value = kruskal(*test_data)
+        print(f"H statistic = {h_statistic}, p-value = {p_value}")
+
+    if p_value < alpha:
+        print("There are significant differences between the groups.")
+    else:
+        print("There are no significant differences between the groups.")
+    print("____________________________________________________\n")
+
+# Example usage
+# perform_stat_test([data_group1, data_group2], "Test Name")
+
     
 # DATAFILE
-file_path = '../data/study3/data_2023_12_11.csv'
+file_path = '../data/study3/data_2023_12_16.csv'
 
 # Read the CSV file
 df = pd.read_csv(file_path)

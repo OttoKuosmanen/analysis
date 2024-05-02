@@ -1,9 +1,36 @@
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
+from scipy.stats import chi2_contingency
+
+# Functions
+
+def table(observed, expected_ratio=0.5):
+    # data_structure for observed [AI,Human]
+    
+    observed_counts = observed
+    expected_counts = [sum(observed) * expected_ratio,sum(observed) * expected_ratio]
+
+    data = {
+        'Observed Counts': observed_counts,
+        'Expected Counts': expected_counts
+        }
+
+    index = ['AI source indicated', 'Human source indicated']
+
+
+    df = pd.DataFrame(data, index=index)
+    return df
+
+def perform_chi_square_test(observed_counts):
+    # The observed counts are in the format [AI count, Human count]
+    total = sum(observed_counts)
+    expected_counts = [total / 2, total / 2]  # Assuming 50/50 split for expected counts
+
+    chi2_statistic, p_value, _, _ = chi2_contingency([observed_counts, expected_counts])
+    return chi2_statistic, p_value
+
 
 # DATAFILE
-file_path = '../data/study2/data_2023_12_11.csv'
+file_path = '../data/study2/data_2023_12_16.csv'
 
 # Read the CSV file
 df = pd.read_csv(file_path)
@@ -18,10 +45,6 @@ data_ore = df.drop([0, 1], axis=0)
 # Chop columns to include only ratings
 ratings = data_ore.iloc[:, 23:-1]
 
-""" read comments
-for comment in df['Comment']:
-    print(comment)
-"""
 
 # Group ratings
 Human = ratings[[col for col in ratings.columns if col.lower().startswith('human')]]
@@ -77,31 +100,31 @@ print(f"gpt4 correct :{gpt4_correct}%")
 human_correct =  human_human_count / (human_human_count + human_ai_count)
 print(f"Human correct :{human_correct}%")
 
-# Plotting
+# making tables
+gpt3_observed = [gpt3_ai_count,gpt3_human_count]
+gptchat_observed = [gptchat_ai_count,gptchat_human_count]
+gpt4_observed = [gpt4_ai_count,gpt4_human_count]
+human_observed = [human_ai_count,human_human_count]
+AI_observed = [gpt3_ai_count+gptchat_ai_count+gpt4_ai_count,gpt3_human_count+gptchat_human_count+gpt4_human_count]
 
-# Define a colorblind-friendly palette
-blind_palette = sns.color_palette("colorblind")
-chosen_colors = ["salmon",blind_palette[0],blind_palette[0],blind_palette[0]]
 
-# Create a bar plot to visualize the rates of correct identification for each model
-models = ['Human', 'GPT3', 'GPT3.5', 'GPT4']
-correct_rates = [human_correct, gpt3_correct, gptchat_correct, gpt4_correct]
+df_gpt3 = table(gpt3_observed)
+df_gptchat = table(gptchat_observed)
+df_gpt4 = table(gpt4_observed)
+df_human = table(human_observed)
+df_AI = table(AI_observed)
 
-# Create a bar plot 
-plt.figure(figsize=(10, 6))
-sns.barplot(x=models, y=correct_rates, palette=chosen_colors)
-plt.title('Correctly Identified Source', fontweight='bold', fontsize=16)
-plt.ylim(0, 1)  # Set y-axis limit from 0 to 1
-plt.ylabel('Correct Identification Procentage', fontweight='bold', fontsize=14)
-plt.xlabel('Models', fontweight='bold', fontsize=14)
-plt.xticks(fontweight='bold', fontsize=12)  # Rotate x-axis labels for better readability
+# Individual tests
+chi2_gpt3, p_gpt3 = perform_chi_square_test(gpt3_observed)
+chi2_gptchat, p_gptchat = perform_chi_square_test(gptchat_observed)
+chi2_gpt4, p_gpt4 = perform_chi_square_test(gpt4_observed)
+chi2_human, p_human = perform_chi_square_test(human_observed)
+chi2_ai, p_ai = perform_chi_square_test(AI_observed)
 
-# Display the percentages and total_n on top of the bars
-for i, (rate, total) in enumerate(zip(correct_rates, total_n)):
-    plt.text(i, rate + 0.02, f'{rate*100:.2f}%', ha='center', fontsize=12)
-    plt.text(i, 0.05, f'N: {total}', ha='center', fontsize=12)  # Adjust the vertical position here
-
-# Show the plot
-plt.tight_layout()
-plt.show()
+# print values to see the results
+print("GPT-3 Chi-Square:", chi2_gpt3, "P-Value:", p_gpt3)
+print("GPTchat Chi-Square:", chi2_gptchat, "P-Value:", p_gptchat)
+print("GPT-4 Chi-Square:", chi2_gpt4, "P-Value:", p_gpt4)
+print("Human Chi-Square:", chi2_human, "P-Value:", p_human)
+print("Aggregated AI Chi-Square:", chi2_ai, "P-Value:", p_ai)
 

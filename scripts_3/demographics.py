@@ -19,25 +19,31 @@ ratings = ratings_only.copy()
 
 # Count non-NaN values per row
 ratings['Non_NaN_Count'] = ratings.apply(lambda row: row.notnull().sum(), axis=1)
-observations = sum(ratings['Non_NaN_Count'])
+
 
 # Count rows with only NaN values (no answers)
 count_all_nan = (ratings['Non_NaN_Count'] == 0).sum()
 print(f"Participants with no answers: {count_all_nan}")
 
-# Participant number
+# Count rows with partial nan values
+count_partial = ((ratings['Non_NaN_Count'] != 0) & (ratings['Non_NaN_Count'] != 24)).sum()
+print ("Partial completion:", count_partial)
+
+
+# Count rows with full completion
+count_full = (ratings['Non_NaN_Count'] == 24).sum()
+print ("Full completion:", count_full)
+
 
 # Count the total number of participants
-total_participants = data_ore.shape[0]
+total_participants = count_all_nan + count_full + count_partial
 print(f"Total number of participants: {total_participants}")
-participants_analysed = total_participants - count_all_nan
+participants_analysed = count_full + count_partial
 print(f"Analysed participants: {participants_analysed}")
 
 
-
-# Observations
-
 # Print total observations
+observations = sum(ratings['Non_NaN_Count'])
 print(f"Total observations: {observations}")
 
 
@@ -86,3 +92,29 @@ analysed = ratings[ratings['Non_NaN_Count'] > 0]
 source_analysis = analysed['Source'].value_counts()
 print("\nSource distribution for partial participation:")
 print(source_analysis)
+
+# CALUCULATIONS of EXPERIMENTAL TIME
+
+# Section data for average time
+exe_time = data_ore.iloc[:, [0,1,5]]
+
+# Filter the DataFrame Progress should be 100 and participant agreed to participate.
+completed = exe_time[(exe_time['Progress'] == '100') & (exe_time['Consent'] == "I agree to participate -- Take me to the questionnaire!")].copy()
+
+# Duration was stored in a string variable, transform to numeric.
+completed['Duration (in seconds)'] = pd.to_numeric(completed['Duration (in seconds)'], errors='coerce')
+
+#Filter out participants that took brakes
+completed_filtered = completed[completed['Duration (in seconds)'] <= 7200]
+
+# Calculate the average of Duration
+print("Average time in minutes")
+average_time = completed['Duration (in seconds)'].mean()
+average_minutes = average_time / 60
+print(average_minutes)
+
+# Calculate the average of Duration when excluding participants that took more than 2 hours
+print("Average time in minutes: with participants that took less than 2 hours to complete")
+average_time_filtered = completed_filtered['Duration (in seconds)'].mean()
+average_minutes_filtered = average_time_filtered / 60
+print(average_minutes_filtered)

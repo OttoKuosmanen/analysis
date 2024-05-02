@@ -1,10 +1,10 @@
-import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
+import pandas as pd
+
 
 
 # DATAFILE
-file_path = '../data/study2/data_2023_12_11.csv'
+file_path = '../data/study2/data_2023_12_16.csv'
 
 # Read the CSV file
 df = pd.read_csv(file_path)
@@ -45,71 +45,62 @@ total_observations_gpt4 = gpt4_ai_count + gpt4_human_count
 
 total_n = [total_observations_human, total_observations_gpt3, total_observations_gptchat, total_observations_gpt4]
 
-# Print the counts
-print("Human group - 'Human' count:", human_human_count, "'AI' count:", human_ai_count)
-print("GPT3 group - 'Human' count:", gpt3_human_count, "'AI' count:", gpt3_ai_count)
-print("GPTchat group - 'Human' count:", gptchat_human_count, "'AI' count:", gptchat_ai_count)
-print("GPT4 group - 'Human' count:", gpt4_human_count, "'AI' count:", gpt4_ai_count)
 
 
 # AI TOTALS
 tt = gpt3_ai_count + gpt3_human_count + gpt4_ai_count + gpt4_human_count + gptchat_ai_count + gptchat_human_count
 tc = gpt3_ai_count + gpt4_ai_count + gptchat_ai_count
 ai_correct =  tc / tt
-print(f"AI correct :{ai_correct}%")
+
 
 # GPT 3
-gpt3_correct = gpt3_ai_count / (gpt3_ai_count + gpt3_human_count)
-print(f"gpt3 correct :{gpt3_correct}%")
+gpt3_correct = gpt3_human_count / (gpt3_ai_count + gpt3_human_count)
 
 # GPT3.5
-gptchat_correct = gptchat_ai_count / (gptchat_ai_count + gptchat_human_count)
-print(f"gpt3.5 correct :{gptchat_correct}%")
+gptchat_correct = gptchat_human_count / (gptchat_ai_count + gptchat_human_count)
+
 
 # GPT 4
-gpt4_correct = gpt4_ai_count / (gpt4_ai_count + gpt4_human_count)
-print(f"gpt4 correct :{gpt4_correct}%")
+gpt4_correct = gpt4_human_count / (gpt4_ai_count + gpt4_human_count)
 
 # Human
 human_correct =  human_human_count / (human_human_count + human_ai_count)
-print(f"Human correct :{human_correct}%")
 
-
-# Plotting
 
 # Define color palette
-chosen_colors = ["#f7786b","#034f84","#034f84","#034f84"]
+chosen_colors = ["#f7786b", "#034f84", "#034f84", "#034f84"]
 
-# Create a bar plot to visualize the rates of correct identification for each model
-models = ['Human', 'GPT3', 'GPT3.5', 'GPT4']
-correct_rates = [human_correct*100, gpt3_correct*100, gptchat_correct*100,gpt4_correct*100]
+# Data for the plot
+models = ['Human', 'Davinci-3', 'GPT3.5-Turbo', 'GPT-4']
+correct_rates = [human_correct * 100, gpt3_correct * 100, gptchat_correct * 100, gpt4_correct * 100]
 
-# Create a bar plot 
+# Create the bar plot using matplotlib
 plt.figure(figsize=(8, 6))
-sns.barplot(x=models, y=correct_rates, palette=chosen_colors)
-plt.title('Correctly Identified Source', fontweight='bold', fontsize=24,pad=24)
-plt.ylim(0, 1)  # Set y-axis limit from 0 to 1
-plt.xlabel('Models', fontsize=24, fontweight="bold")
-plt.xticks(fontsize=18)
-plt.yticks([0,25,50,75,100], fontsize=20)
-plt.axhline(y=50, color='black', linestyle='--')
+bar_positions = range(len(models))  # Position of bars on x-axis
 
-#significance  symbol
+# Creating bars
+bars = plt.bar(bar_positions, correct_rates, color=chosen_colors)
+
+# Adding the title and labels
+plt.title('Identified as Human', fontweight='bold', fontsize=24, pad=24)
+plt.xticks(bar_positions, models, fontsize=18)  # Set the position and labels of the ticks on the x-axis
+plt.yticks([0, 25, 50, 75, 100], fontsize=20)
+plt.ylim(0, 100)  # Set y-axis limit
+
+# Draw a horizontal line at 50%
+plt.axhline(y=50, color='black', linestyle='--', alpha=0.5)
+
+# Add significance level text
 x_position = 0  # X-coordinate for the "Human" bar
-y_position = human_correct*100 + 5  # Y-coordinate slightly above the bar
-significance_level = "***"  # Change this to your actual significance level
-
-
-# Add text for significance level
-plt.text(x_position, y_position +5, significance_level, ha='center', fontsize=20)
-
+y_position = human_correct * 100 + 5  # Y-coordinate slightly above the bar
+significance_level = "***"
+plt.text(x_position, y_position + 5, significance_level, ha='center', fontsize=20)
 
 # Display the percentages and total_n on top of the bars
 for i, (rate, total) in enumerate(zip(correct_rates, total_n)):
     plt.text(i, rate + 1, f'{rate:.1f}%', ha='center', fontsize=22)
-    plt.text(i, 3, f'N: {total}', ha='center', fontsize=16, color="white", fontweight='bold')  # Adjust the vertical position here
+    plt.text(i, 3, f'N: {total}', ha='center', fontsize=16, color="white")
 
 # Show the plot
 plt.tight_layout()
 plt.show()
-

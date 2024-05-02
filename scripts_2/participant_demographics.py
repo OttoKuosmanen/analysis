@@ -19,16 +19,6 @@ data_ore = df.drop([0, 1], axis=0)
 # Chop columns to include only participant information
 intel = data_ore.iloc[:, 5:-1]
 
-# Completion rate
-count_completed = intel['Finished'].value_counts().get('True', 0)
-count_uncompleted = intel['Finished'].value_counts().get('False', 0)
-print(f"Completed: {count_completed}, Did not fully complete the study: {count_uncompleted}.")
-
-# Participants
-participants = count_completed + count_uncompleted
-print(f"participant amount = {participants}")
-
-# Observations
 
 # Chop columns to include only ratings
 ratings_only = data_ore.iloc[:, 22:-2]
@@ -55,11 +45,18 @@ count_zero_answers = (ratings['Total_Count'] == 0).sum()
 print(f"Participants with 0 answers: {count_zero_answers}")
 
 # Count rows with answers more than 0 but less than 6
-count_partial_answers = ((ratings['Total_Count'] > 0) & (ratings['Total_Count'] < 6)).sum()
+count_partial_answers = ((ratings['Total_Count'] > 0) & (ratings['Total_Count'] < 9)).sum()
 print(f"Participants with partial completion (more than 0 but less than 6): {count_partial_answers}")
 
-participants_in_analysis = participants - count_zero_answers
+# Count rows with 6 answers
+count_full_answers = (ratings['Total_Count'] == 9).sum()
+print(f"Participants with full completion: {count_full_answers}")
 
+
+participants = count_full_answers + count_partial_answers + count_zero_answers
+print("Participants:", participants)
+
+participants_in_analysis = participants - count_zero_answers
 print(f"participants_in_analysis: {participants_in_analysis}")
 
 # Gender
@@ -133,8 +130,6 @@ print(sum(location_analysis))
 
 
 
- 
-
 # Source
 print("Source")
 
@@ -144,10 +139,38 @@ ratings['source'] = data_ore['source']
 # Filter for complete and partial participation
 analysed = ratings[ratings['Total_Count'] > 0]
 
-
 # Country distribution for partial participation
 source_analysis = analysed['source'].value_counts()
 print("\nSource distribution for partial participation:")
 print(source_analysis)
+
+# CALUCULATIONS of EXPERIMENTAL TIME
+
+# Section data for average time
+exe_time = data_ore.iloc[:, [3,4,10]]
+
+# Filter the DataFrame Progress should be 100 and participant agreed to participate.
+completed = exe_time[(exe_time['Progress'] == '100') & (exe_time['Consent'] == "I agree to participate -- Take me to the questionnaire!")].copy()
+
+# Duration was stored in a string variable, transform to numeric.
+completed['Duration (in seconds)'] = pd.to_numeric(completed['Duration (in seconds)'], errors='coerce')
+
+#Filter out participants that took brakes
+completed_filtered = completed[completed['Duration (in seconds)'] <= 7200]
+
+# Calculate the average of Duration
+print("Average time in minutes")
+average_time = completed['Duration (in seconds)'].mean()
+average_minutes = average_time / 60
+print(average_minutes)
+
+# Calculate the average of Duration when excluding participants that took more than 2 hours
+print("Average time in minutes: with participants that took less than 2 hours to complete")
+average_time_filtered = completed_filtered['Duration (in seconds)'].mean()
+average_minutes_filtered = average_time_filtered / 60
+print(average_minutes_filtered)
+
+
+
  
 

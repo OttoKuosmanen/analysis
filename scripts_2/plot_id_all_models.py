@@ -4,7 +4,7 @@ import pandas as pd
 
 
 # DATAFILE
-file_path = '../data/study2/data_2023_12_11.csv'
+file_path = '../data/study2/data_2023_12_16.csv'
 
 # Read the CSV file
 df = pd.read_csv(file_path)
@@ -71,7 +71,7 @@ human_correct =  human_human_count / (human_human_count + human_ai_count)
 chosen_colors = ["#f7786b", "#034f84", "#034f84", "#034f84"]
 
 # Data for the plot
-models = ['Human', 'GPT3', 'GPT3.5', 'GPT4']
+models = ['Human', 'Davinci-3', 'GPT3.5-Turbo', 'GPT-4']
 correct_rates = [human_correct * 100, gpt3_correct * 100, gptchat_correct * 100, gpt4_correct * 100]
 
 # Create the bar plot using matplotlib
@@ -83,7 +83,6 @@ bars = plt.bar(bar_positions, correct_rates, color=chosen_colors)
 
 # Adding the title and labels
 plt.title('Correctly Identified Source', fontweight='bold', fontsize=24, pad=24)
-plt.xlabel('Models', fontsize=24, fontweight='bold')
 plt.xticks(bar_positions, models, fontsize=18)  # Set the position and labels of the ticks on the x-axis
 plt.yticks([0, 25, 50, 75, 100], fontsize=20)
 plt.ylim(0, 100)  # Set y-axis limit
@@ -94,7 +93,7 @@ plt.axhline(y=50, color='black', linestyle='--')
 # Add significance level text
 x_position = 0  # X-coordinate for the "Human" bar
 y_position = human_correct * 100 + 5  # Y-coordinate slightly above the bar
-significance_level = "***"  # Change this to your actual significance level
+significance_level = "***"
 plt.text(x_position, y_position + 5, significance_level, ha='center', fontsize=20)
 
 # Display the percentages and total_n on top of the bars
